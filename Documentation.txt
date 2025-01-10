@@ -1,92 +1,173 @@
-npm init
+# Authentication Application Documentation
 
-npm i express cors dotenv nodemon jsonwebtoken mongoose bcryptjs nodemailer cookie-parser
+## Overview
+This document outlines the setup and functionality of an authentication system that includes user registration, login, email verification, and password reset capabilities. The project is built using Node.js, Express, MongoDB, and React for the backend and frontend respectively.
 
- "type": "module",
+---
 
-  "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js" For updating the message
+## Backend Setup
 
-mongodb+srv://yuvarajkrishnan:<db_password>@cluster0.phf7w.mongodb.net/
+### 1. Initialization
+1. Initialize the Node.js project:
+   ```bash
+   npm init
+   ```
+2. Install required dependencies:
+   ```bash
+   npm i express cors dotenv nodemon jsonwebtoken mongoose bcryptjs nodemailer cookie-parser
+   ```
+3. Update the `package.json` file to include:
+   ```json
+   "type": "module",
+   "scripts": {
+     "start": "node server.js",
+     "server": "nodemon server.js"
+   }
+   ```
 
-Connect mongodb.js with the server.js using connectDB()
-Now the database is connected
-We have to store the users data in database we have to create pip model
+### 2. MongoDB Setup
+1. Use the provided MongoDB URI:
+   ```
+   mongodb+srv://yuvarajkrishnan:<db_password>@cluster0.phf7w.mongodb.net/
+   ```
+2. Create a `mongodb.js` file in the `config` folder to connect the database to the application using a `connectDB()` function.
+3. Integrate the database connection in `server.js`.
 
-in userModel.js we have to create a model called user and we create a schema for all the input data that is applied in the website . we can call userModel to store the data in mongoDB database
+### 3. Models
+Create a `userModel.js` file to define the `User` schema:
+- Include fields for all user input data.
+- Use this model to store and interact with user data in the MongoDB database.
 
-For a new user we have to create a controller . With it we can create the api end point
+### 4. Controllers
+#### User Registration
+1. Validate input fields and check for missing data.
+2. Check if the email already exists in the database.
+3. Hash the password using `bcryptjs` with a salt round of 10.
+4. Create a new user object and save it to the database.
+5. Generate a JWT token and send it as a secure HTTP-only cookie.
 
-In authController we create all the functons such as login , register , reset password , verify email etc
+#### User Login
+1. Validate input credentials.
+2. Check if the email exists in the database.
+3. Compare the provided password with the hashed password stored in the database.
+4. Generate and send a JWT token as an HTTP-only cookie.
 
-Userregistration controller:
+#### Additional Features
+- **Logout**: Clears the JWT cookie.
+- **Email Verification**: Send and verify OTP for email verification using `nodemailer`.
+- **Password Reset**: Send OTP for password reset and allow users to update their password.
 
+### 5. Routes
+1. **`authRoutes.js`**: Handles endpoints for:
+   - Register
+   - Login
+   - Logout
+   - Email verification
+   - Password reset
+2. **`userRoutes.js`**: Provides endpoints to fetch user details and other user-related information.
 
-bcryptjs: Library used to hash and compare passwords securely.
-jsonwebtoken: Library to generate and verify JSON Web Tokens (JWT) for authentication.
-userModel: Imports the userModel schema (likely defined in ../models/userModel) for interacting with the database.
+### 6. Configuration
+- **Nodemailer**: Used to send emails for verification and password reset.
+- **Environment Variables**: Store sensitive data like `JWT_SECRET` and MongoDB URI in a `.env` file.
 
-Checks if any field is missing.
-If true, immediately returns a JSON response with a failure message.
+---
 
-Searches the database (userModel) for a user with the provided email.
-If a user exists, sends a failure response with an appropriate message.
+## Frontend Setup
 
-Uses bcrypt to hash the password with a salt round of 10.
-A hash ensures passwords are stored securely and are not stored in plain text.
+### 1. Initialization
+1. Create a new React project:
+   ```bash
+   npm create vite@latest
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   npm install axios react-router-dom react-toastify
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Creates a new user object using the userModel.
-Saves the new user to the database using await user.save().
+### 2. Tailwind CSS
+- Follow Tailwind CSS setup steps to style the frontend application.
 
-Generates a JWT token:
-Payload: { id: user._id } (stores the user's unique ID).
-Secret key: process.env.JWT_SECRET (stored in environment variables for security).
-Expiration: 7d (valid for 7 days).
+---
 
-Sends the token as a secure HTTP-only cookie:
-httpOnly: true: Prevents client-side JavaScript from accessing the cookie.
-secure: Ensures the cookie is only sent over HTTPS in production.
-sameSite: Prevents cross-site request forgery (CSRF).
-maxAge: Sets the cookie lifespan to 7 days (in milliseconds).
+## Features
 
-Userlogin:
+### Backend Features
+- **User Registration**: Securely store user data and passwords.
+- **User Login**: Authenticate users and provide secure JWT tokens.
+- **Email Verification**: Send OTP for email verification.
+- **Password Reset**: Send and validate OTP for resetting passwords.
+- **Secure Cookie Handling**: Use HTTP-only cookies to store JWT tokens securely.
 
-Same steps , but it check whether the email is already present in the userModel
+### Frontend Features
+- **User Interface**: Built with React and styled using Tailwind CSS.
+- **Routing**: Implemented using `react-router-dom`.
+- **Notifications**: User notifications with `react-toastify`.
+- **API Integration**: Communicate with the backend using `axios`.
 
-Compares the provided password with the stored hashed password.
-If passwords don’t match, returns an error.
+---
 
-register: Registers a new user, hashes the password, generates a JWT, and sets it as a cookie.
-login: Authenticates a user, validates credentials, generates a JWT, and sets it as a cookie.
-logout: Clears the JWT cookie, effectively logging the user out.
+## Folder Structure
+```
+├── backend
+│   ├── config
+│   │   └── mongodb.js
+│   ├── controllers
+│   │   ├── authController.js
+│   │   └── userController.js
+│   ├── models
+│   │   └── userModel.js
+│   ├── routes
+│   │   ├── authRoutes.js
+│   │   └── userRoutes.js
+│   └── server.js
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   └── App.js
+│   └── public
+└── README.md
+```
 
-//Send Verification OTP to Users Email
+---
 
-//Verify the email using OTP
+## Running the Application
 
-//Check if user in authenticated 
+### Backend
+1. Start the server:
+   ```bash
+   npm run server
+   ```
+2. Ensure MongoDB is running and connected.
 
-//Send Password Reset OTP
+### Frontend
+1. Start the frontend:
+   ```bash
+   npm run dev
+   ```
 
-// Reset User Password
+---
 
-All this process takes place in authRoutes.js
-In userRoutes.js the information and details of the user is displayed
+## Key Libraries
+- **express**: Web framework for Node.js.
+- **cors**: Enable cross-origin resource sharing.
+- **dotenv**: Manage environment variables.
+- **jsonwebtoken**: Generate and verify JWTs.
+- **mongoose**: Object Data Modeling (ODM) library for MongoDB.
+- **bcryptjs**: Securely hash and compare passwords.
+- **nodemailer**: Send emails for verification and password reset.
+- **cookie-parser**: Parse HTTP request cookies.
 
-In config we have mongodb.js to connect the database to the nodejs 
-We alse have nodemailer to send the mail from the company to the user 
+---
 
-This is what happens in the server
+## Notes
+1. Replace `<db_password>` in the MongoDB URI with the actual password.
+2. Ensure `.env` file is properly configured with `JWT_SECRET` and MongoDB credentials.
+3. Test all endpoints using tools like Postman to ensure functionality.
 
-client - Frontend
-
-npm create vite@latest
-
-npm install
-
-npm install axios react-router-dom react-toastify
-
-npm run dev
-
-check tailwind css to check all the steps 
+---
