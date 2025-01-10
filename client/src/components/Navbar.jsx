@@ -3,6 +3,7 @@ import {assets} from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { AppContent } from '../context/AppContext'
 
+
 const Navbar = () => {
 
     const navigate = useNavigate()
