@@ -1,0 +1,92 @@
+npm init
+
+npm i express cors dotenv nodemon jsonwebtoken mongoose bcryptjs nodemailer cookie-parser
+
+ "type": "module",
+
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js" For updating the message
+
+mongodb+srv://yuvarajkrishnan:<db_password>@cluster0.phf7w.mongodb.net/
+
+Connect mongodb.js with the server.js using connectDB()
+Now the database is connected
+We have to store the users data in database we have to create pip model
+
+in userModel.js we have to create a model called user and we create a schema for all the input data that is applied in the website . we can call userModel to store the data in mongoDB database
+
+For a new user we have to create a controller . With it we can create the api end point
+
+In authController we create all the functons such as login , register , reset password , verify email etc
+
+Userregistration controller:
+
+
+bcryptjs: Library used to hash and compare passwords securely.
+jsonwebtoken: Library to generate and verify JSON Web Tokens (JWT) for authentication.
+userModel: Imports the userModel schema (likely defined in ../models/userModel) for interacting with the database.
+
+Checks if any field is missing.
+If true, immediately returns a JSON response with a failure message.
+
+Searches the database (userModel) for a user with the provided email.
+If a user exists, sends a failure response with an appropriate message.
+
+Uses bcrypt to hash the password with a salt round of 10.
+A hash ensures passwords are stored securely and are not stored in plain text.
+
+Creates a new user object using the userModel.
+Saves the new user to the database using await user.save().
+
+Generates a JWT token:
+Payload: { id: user._id } (stores the user's unique ID).
+Secret key: process.env.JWT_SECRET (stored in environment variables for security).
+Expiration: 7d (valid for 7 days).
+
+Sends the token as a secure HTTP-only cookie:
+httpOnly: true: Prevents client-side JavaScript from accessing the cookie.
+secure: Ensures the cookie is only sent over HTTPS in production.
+sameSite: Prevents cross-site request forgery (CSRF).
+maxAge: Sets the cookie lifespan to 7 days (in milliseconds).
+
+Userlogin:
+
+Same steps , but it check whether the email is already present in the userModel
+
+Compares the provided password with the stored hashed password.
+If passwords don’t match, returns an error.
+
+register: Registers a new user, hashes the password, generates a JWT, and sets it as a cookie.
+login: Authenticates a user, validates credentials, generates a JWT, and sets it as a cookie.
+logout: Clears the JWT cookie, effectively logging the user out.
+
+//Send Verification OTP to Users Email
+
+//Verify the email using OTP
+
+//Check if user in authenticated 
+
+//Send Password Reset OTP
+
+// Reset User Password
+
+All this process takes place in authRoutes.js
+In userRoutes.js the information and details of the user is displayed
+
+In config we have mongodb.js to connect the database to the nodejs 
+We alse have nodemailer to send the mail from the company to the user 
+
+This is what happens in the server
+
+client - Frontend
+
+npm create vite@latest
+
+npm install
+
+npm install axios react-router-dom react-toastify
+
+npm run dev
+
+check tailwind css to check all the steps 
